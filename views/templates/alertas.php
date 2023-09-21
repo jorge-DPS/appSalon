@@ -4,10 +4,12 @@ foreach ($alertas as $alerta => $mensajes) :
 ?>
 
         <div class="alerta <?php echo $alerta; ?>">
-            <?php echo $mensaje; ?>
+            <?php echo $mensaje;?>
         </div>
 
 <?php
     endforeach;
 
 endforeach;
+
+?>

@@ -26,8 +26,8 @@ class Usuario extends ActiveRecord
         $this->email = $args['email'] ?? '';
         $this->password = $args['password'] ?? '';
         $this->telefono = $args['telefono'] ?? '';
-        $this->admin = $args['admin'] ?? null;
-        $this->confirmado = $args['confirmado'] ?? null;
+        $this->admin = $args['admin'] ?? '0';
+        $this->confirmado = $args['confirmado'] ?? '0';
         $this->token = $args['token'] ?? '';
     }
 
@@ -43,7 +43,7 @@ class Usuario extends ActiveRecord
         }
 
         if (!$this->telefono) {
-            self::$alertas['error'][] = 'El telefono del cliente es obligatorio';
+            self::$alertas['error'][] = 'El Telefono del cliente es obligatorio';
         }
 
         if (!$this->email) {
@@ -52,6 +52,40 @@ class Usuario extends ActiveRecord
 
         if (strlen($this->password) < 6) {
             self::$alertas['error'][] = 'El Password debe contener almenos 6 caracteres';
+        }
+
+        return self::$alertas;
+    }
+
+    // validar el formulario de incio de sesion
+    public function validarLogin(){
+        if (!$this->email) {
+            self::$alertas['error'][] = 'El Email es obligatorio';
+        }
+        if (!$this->password) {
+            self::$alertas['error'][] = 'El Password es obligatorio';
+        }
+
+        return self::$alertas;
+    }
+
+    // Validar el email
+    public function validarEmail(){
+        if (!$this->email) {
+            self::$alertas['error'][] = 'El Email es obligatorio';
+        }
+
+        return self::$alertas;
+    }
+
+    // Validar Password
+    public function validarPassword() {
+        if (!$this->password) {
+            self::$alertas['error'][] = 'el password es obligatorio';
+        }
+
+        if (strlen($this->password) < 6) {
+            self::$alertas['error'][] = 'El Password debe tener almenos 6 caracteres';
         }
 
         return self::$alertas;
@@ -77,5 +111,17 @@ class Usuario extends ActiveRecord
     public function generarToken()
     {
         $this->token = uniqid();
+    }
+
+    public function comprobarPasswordAndVerificado($password){
+        // Verifica si el password es exactamente mismo cuando ingresa en el fomulario y de la base de datos
+        $resultado = password_verify($password, $this->password);
+        if (!$resultado || !$this->confirmado) {
+            //debuguear('el usuario no esta confirmado');
+            self::$alertas['error'][] = 'Password Incorrecto o tu cuenta no ha sido confirmado';
+        }else {
+            //debuguear('El usuario si esta confirmado');
+            return true;
+        }
     }
 }
