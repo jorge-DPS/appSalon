@@ -20,7 +20,7 @@
         <form class="formulario">
             <div class="campo">
                 <label for="nombre">Nombre</label>
-                <input id="nombre" type="text" placeholder="Tu Nombre" / value="<?php echo $nombre; ?>" disabled>
+                <input id="nombre" type="text" placeholder="Tu Nombre" value="<?php echo $nombre; ?>" disabled>
             </div>
             <div class="campo">
                 <label for="fecha">Fecha</label>
@@ -35,5 +35,15 @@
     <div id="paso-3" class="seccion">
         <h2>Resumen</h2>
         <p class="text-center">Verifica que la información sea correcta</p>
+
+
+    </div>
+    <div class="paginacion">
+        <button id="anterior" class="boton">&laquo; Anterior</button>
+        <button id="siguiente" class="boton"> Siguiente &raquo;</button>
     </div>
 </div>
+
+<?php
+$script = " <script src='build/js/app.js'></script> ";
+?>

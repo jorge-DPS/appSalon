@@ -18,6 +18,11 @@
         </div>
     </div>
 
+    <!-- Aañadiendo un archivo script; unicamente donde lo queremos que se añada -->
+    <?php
+    echo $script ?? '';
+    ?>
+
 </body>
 
 </html>
