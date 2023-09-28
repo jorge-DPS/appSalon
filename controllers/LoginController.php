@@ -6,8 +6,10 @@ use Classes\Email;
 use Model\Usuario;
 use MVC\Router;
 
-class LoginController{
-    public static function login(Router $router){
+class LoginController
+{
+    public static function login(Router $router)
+    {
         $alertas = [];
         $auth = new Usuario;
 
@@ -22,8 +24,8 @@ class LoginController{
                 $usuario = Usuario::donde('email', $auth->email);
                 if ($usuario) {
                     //Verificar el password
-                    
-                    if ( $usuario->comprobarPasswordAndVerificado($auth->password) ) {
+
+                    if ($usuario->comprobarPasswordAndVerificado($auth->password)) {
                         // Autenticar usuario
                         session_start();
                         $_SESSION['id'] = $usuario->id;
@@ -36,19 +38,16 @@ class LoginController{
                             //debuguear('es admin');
                             $_SESSION['admin'] = $usuario->admin ?? null;
                             header('Location: /admin');
-
-                        }else {
+                        } else {
                             header('Location: /cita');
                         }
 
                         debuguear($_SESSION);
-                        
                     }
                 } else {
                     Usuario::setAlerta('error', 'Usuario no encontrado');
                 }
             }
-
         }
 
         $alertas = Usuario::getAlertas();
@@ -60,7 +59,10 @@ class LoginController{
     }
     public static function logout()
     {
-        echo 'desde el logout';
+        // echo 'desde el logout';
+        estaAutenticado();
+        $_SESSION = []; // -> aqui borramos la session
+        header('Location: /');
     }
 
     // olvide mi contraseña
@@ -78,7 +80,7 @@ class LoginController{
                     // Generar un token 
                     $usuario->generarToken();
                     $usuario->guardar();
-                    
+
                     // Enviar Email
                     $email = new Email($usuario->email, $usuario->nombre, $usuario->token);
                     $email->enviarInstrucciones();
@@ -100,7 +102,8 @@ class LoginController{
         ]);
     }
 
-    public static function recuperar(Router $router){
+    public static function recuperar(Router $router)
+    {
         $alertas = [];
         $error = false;
 
@@ -128,7 +131,6 @@ class LoginController{
                 if ($resultado) {
                     header('Location: /');
                 }
-
             }
         }
 
@@ -148,6 +150,7 @@ class LoginController{
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // echo 'Enviaste el formulario';
             $usuario->sincronizar($_POST);
+            // debuguear($_POST);
             $alertas = $usuario->validarNuevaCuenta();
 
             //Revisar que alerta este vacio
@@ -164,12 +167,14 @@ class LoginController{
 
                     // Generar Token unico
                     $usuario->generarToken();
+                    // debuguear($usuario->token);
 
                     //Enviar el email (depues de generar el token)
                     $email = new Email($usuario->nombre, $usuario->email, $usuario->token);
                     $email->enviarConfirmacion();
 
                     // Crear el usuario
+                    // debuguear($resultado);
                     $resultado = $usuario->guardar();
 
                     if ($resultado) {
@@ -188,7 +193,8 @@ class LoginController{
         $router->render('auth/mensaje');
     }
 
-    public static function confirmar(Router $router)    {
+    public static function confirmar(Router $router)
+    {
 
         $alertas = [];
         $token = s($_GET['token']);

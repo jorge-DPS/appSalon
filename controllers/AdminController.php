@@ -4,21 +4,13 @@ namespace Controllers;
 
 use MVC\Router;
 
-class CitaController
+class AdminController
 {
     public static function index(Router $router)
     {
-
-
-
-
-        estaAutenticado();
-
-
-
-        $router->render('cita/index', [
+        // session_start();
+        $router->render('admin/index', [
             'nombre' => $_SESSION['nombre'],
-            'id' => $_SESSION['id'],
         ]);
     }
 }

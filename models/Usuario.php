@@ -58,7 +58,8 @@ class Usuario extends ActiveRecord
     }
 
     // validar el formulario de incio de sesion
-    public function validarLogin(){
+    public function validarLogin()
+    {
         if (!$this->email) {
             self::$alertas['error'][] = 'El Email es obligatorio';
         }
@@ -70,7 +71,8 @@ class Usuario extends ActiveRecord
     }
 
     // Validar el email
-    public function validarEmail(){
+    public function validarEmail()
+    {
         if (!$this->email) {
             self::$alertas['error'][] = 'El Email es obligatorio';
         }
@@ -79,7 +81,8 @@ class Usuario extends ActiveRecord
     }
 
     // Validar Password
-    public function validarPassword() {
+    public function validarPassword()
+    {
         if (!$this->password) {
             self::$alertas['error'][] = 'el password es obligatorio';
         }
@@ -111,15 +114,17 @@ class Usuario extends ActiveRecord
     public function generarToken()
     {
         $this->token = uniqid();
+        // debuguear($this->token = uniqid());
     }
 
-    public function comprobarPasswordAndVerificado($password){
+    public function comprobarPasswordAndVerificado($password)
+    {
         // Verifica si el password es exactamente mismo cuando ingresa en el fomulario y de la base de datos
         $resultado = password_verify($password, $this->password);
         if (!$resultado || !$this->confirmado) {
             //debuguear('el usuario no esta confirmado');
             self::$alertas['error'][] = 'Password Incorrecto o tu cuenta no ha sido confirmado';
-        }else {
+        } else {
             //debuguear('El usuario si esta confirmado');
             return true;
         }
