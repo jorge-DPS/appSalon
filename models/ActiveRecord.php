@@ -139,12 +139,22 @@ class ActiveRecord
         return array_shift($resultado);
     }
 
-    // 
+    // Busca u registro Por su ID
     public static function donde($columna, $valor)
     {
         $query = "SELECT * FROM " . static::$tabla  . " WHERE $columna = '$valor'";
         $resultado = self::consultarSQL($query);
         return array_shift($resultado);
+    }
+
+    // Consulta PLana de SQL (Utilizar cuando los métodos del modelo no son suficientes)
+    public static function SQL($consulta)
+    {
+        $query = $consulta;
+        $resultado = self::consultarSQL($query);
+        // debuguear($resultado);
+        // return array_shift($resultado); // -> array_shift; saca el primer elemnto del array
+        return $resultado;
     }
 
     // crea un nuevo registro

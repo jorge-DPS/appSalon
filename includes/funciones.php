@@ -24,6 +24,17 @@ function s($html): string
 //         header('Location: /');
 //     }
 // }
+
+function esUltimo(string $actual, string $proximo): bool
+{
+    if ($actual !== $proximo) {
+        return true;
+    }
+
+    return false;
+}
+
+// funcion que revisa que el usuario este auntenticado
 function estaAutenticado(): void
 {
     if (!isset($_SESSION)) {
@@ -31,5 +42,12 @@ function estaAutenticado(): void
     } elseif (!isset($_SESSION['login'])) {
         // no esta autenticado; lo redirige al login
         header('Location: /');
+    }
+}
+
+function esAdmin(): void
+{
+    if (!isset($_SESSION['admin'])) {
+        header('Location:/');
     }
 }
